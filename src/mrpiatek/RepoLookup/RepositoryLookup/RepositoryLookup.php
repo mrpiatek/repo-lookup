@@ -32,6 +32,23 @@ use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\{
 class RepositoryLookup
 {
     /**
+     * Data Fetcher
+     *
+     * @var DataFetcherInterface
+     */
+    protected $dataFetcher;
+
+    /**
+     * RepositoryLookup constructor.
+     *
+     * @param DataFetcherInterface $dataFetcher Data Fetcher
+     */
+    public function __construct(DataFetcherInterface $dataFetcher)
+    {
+        $this->dataFetcher = $dataFetcher;
+    }
+
+    /**
      * Fetches information about repository contributors and returns it as an array
      *
      * @param string $repositoryName Full name of the repository
@@ -43,11 +60,16 @@ class RepositoryLookup
      */
     public function lookupRepository(string $repositoryName): array
     {
-        preg_match('/(?P<vendor>\w+)\/(?P<package>\w+)/', $repositoryName, $matches);
-        if (count($matches) === 0) {
+        $matches = explode('/', $repositoryName);
+        if (count($matches) != 2) {
             throw new InvalidRepositoryNameException();
         }
 
-        //TODO: fetch the actual data
+        list($vendor, $package) = $matches;
+
+        return $this->dataFetcher->fetchRepositoryData(
+            $vendor,
+            $package
+        );
     }
 }
