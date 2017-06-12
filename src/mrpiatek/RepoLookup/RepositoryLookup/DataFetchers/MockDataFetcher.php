@@ -2,16 +2,15 @@
 /**
  * PHP version 7
  *
- * Repository lookup class
+ * Mocked Repository lookup class
  *
- * Class used to lookup repository contributors and present the list with avatars
- * and number of contributions.
+ * Class used to mock repository contributors lookup
  *
  * @category Core
  * @package  MrpiatekRepositoryLookup
  * @author   Mariusz Piątek <mariusz.piatek92@gmail.com>
  * @license  MIT <https://opensource.org/licenses/MIT>
- * @link     https://github.com/mrpiatek/repo-lookup/src/mrpiatek/RepoLookup/RepositoryLookup/DataFetchers/GitHubDataFetcher.php
+ * @link     https://github.com/mrpiatek/repo-lookup/src/mrpiatek/RepoLookup/RepositoryLookup/DataFetchers/MockDataFetcher.php
  */
 
 namespace mrpiatek\RepoLookup\RepositoryLookup\DataFetchers;
@@ -29,13 +28,13 @@ use mrpiatek\RepoLookup\RepositoryLookup\{
  * @package  MrpiatekRepositoryLookup
  * @author   Mariusz Piątek <mariusz.piatek92@gmail.com>
  * @license  MIT <https://opensource.org/licenses/MIT>
- * @link     https://github.com/mrpiatek/repo-lookup/src/mrpiatek/RepoLookup/RepositoryLookup/DataFetchers/GitHubDataFetcher.php
+ * @link     https://github.com/mrpiatek/repo-lookup/src/mrpiatek/RepoLookup/RepositoryLookup/DataFetchers/MockDataFetcher.php
  */
 class MockDataFetcher implements DataFetcherInterface
 {
     /**
-     * Fetches information about GitHub repository contributors and returns it as an
-     * array
+     * Fetches fake information about GitHub repository contributors and returns it
+     * as an array
      *
      * @param string $vendor  Vendor name
      * @param string $package Package name
@@ -46,17 +45,32 @@ class MockDataFetcher implements DataFetcherInterface
      */
     public function fetchRepositoryData(string $vendor, string $package): array
     {
-        return [
-            [
-                'login' => 'taylorotwell',
-                'avatar_url' => 'https://avatars3.githubusercontent.com/u/463230',
-                'contributions' => 2953
-            ],
-            [
-                'login' => 'GrahamCampbell',
-                'avatar_url' => 'https://avatars0.githubusercontent.com/u/2829600',
-                'contributions' => 40
-            ]
-        ];
+        if ($vendor == 'laravel' && $package == 'laravel') {
+            return [
+                [
+                    'name' => 'taylorotwell',
+                    'avatar_url' =>
+                        'https://avatars3.githubusercontent.com/u/463230',
+                    'contributions' => 2953
+                ],
+                [
+                    'name' => 'GrahamCampbell',
+                    'avatar_url' =>
+                        'https://avatars0.githubusercontent.com/u/2829600',
+                    'contributions' => 40
+                ]
+            ];
+        } else if ($vendor == 'mrpiatek' && $package == 'repo-lookup') {
+            return [
+                [
+                    'name' => 'mrpiatek',
+                    'avatar_url' =>
+                        'https://avatars1.githubusercontent.com/u/12552488',
+                    'contributions' => 6
+                ]
+            ];
+        } else {
+            throw new RepositoryNotFoundException();
+        }
     }
 }
