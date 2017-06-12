@@ -30,7 +30,7 @@ interface DataFetcherInterface
     /**
      * Fetches information about repository contributors and returns it as an array
      *
-     * @param string $vendor Vendor name
+     * @param string $vendor  Vendor name
      * @param string $package Package name
      *
      * @return array
