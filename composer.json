@@ -9,15 +9,15 @@
         }
     ],
     "require-dev": {
-        "phpmd/phpmd": "2.*",
-        "squizlabs/PHP_CodeSniffer": "3.*",
-        "phpspec/phpspec": "^3.0",
         "behat/behat": "^3.3",
         "behat/mink-extension": "^2.2",
-        "behat/mink-goutte-driver": "^1.2",
         "fzaninotto/faker": "~1.4",
+        "laracasts/behat-laravel-extension": "^1.0",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7"
+        "phpmd/phpmd": "2.*",
+        "phpspec/phpspec": "^3.0",
+        "phpunit/phpunit": "~5.7",
+        "squizlabs/PHP_CodeSniffer": "3.*"
     },
     "autoload": {
         "classmap": [

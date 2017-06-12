@@ -25,7 +25,6 @@ class RepositoryLookupController extends Controller
 
     public function lookup(Request $request)
     {
-        file_put_contents('test.txt', App::environment());
         $contributors = [];
         $errors = [];
 
