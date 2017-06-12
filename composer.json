@@ -16,5 +16,9 @@
         "behat/mink-extension": "^2.2",
         "behat/mink-goutte-driver": "^1.2"
     },
-    "autoload": {"psr-0": {"": "src"}}
+    "autoload": {"psr-0": {"": "src"}},
+    "require": {
+        "php-http/guzzle6-adapter": "^1.1",
+        "graham-campbell/github": "^5.0"
+    }
 }
