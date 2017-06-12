@@ -19,4 +19,10 @@ class RepositoryLookupSpec extends ObjectBehavior
         $this->shouldThrow(InvalidRepositoryNameException::class)
             ->duringLookupRepository('mrpiatek');
     }
+
+    function it_lookups_repositories()
+    {
+        $this->lookupRepository('mrpiatek/repo-lookup')
+            ->shouldContain(['name' => 'mrpiatek']);
+    }
 }
