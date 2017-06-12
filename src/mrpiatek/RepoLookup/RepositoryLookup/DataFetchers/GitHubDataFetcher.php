@@ -55,7 +55,7 @@ class GitHubDataFetcher implements DataFetcherInterface
      * Fetches information about GitHub repository contributors and returns it as an
      * array
      *
-     * @param string $vendor Vendor name
+     * @param string $vendor  Vendor name
      * @param string $package Package name
      *
      * @return array
@@ -65,7 +65,8 @@ class GitHubDataFetcher implements DataFetcherInterface
     public function fetchRepositoryData(string $vendor, string $package): array
     {
         try {
-            $result = $this->gitHubManager->api('repo')->contributors($vendor, $package);
+            $result = $this->gitHubManager->api('repo')
+                ->contributors($vendor, $package);
         } catch (RuntimeException $e) {
             throw new RepositoryNotFoundException("", 0, $e);
         }
