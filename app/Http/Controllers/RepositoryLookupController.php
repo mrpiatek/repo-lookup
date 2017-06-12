@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\InvalidRepositoryNameException;
+use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\RepositoryNotFoundException;
 use mrpiatek\RepoLookup\RepositoryLookup\RepositoryLookup;
 
 class RepositoryLookupController extends Controller
@@ -22,11 +25,21 @@ class RepositoryLookupController extends Controller
 
     public function lookup(Request $request)
     {
+        file_put_contents('test.txt', App::environment());
         $contributors = [];
+        $errors = [];
+
         if ($request->has('search')) {
-            $contributors = $this->repoLookup->lookupRepository($request->input('search'));
+            try {
+                $contributors = $this->repoLookup->lookupRepository($request->input('search'));
+            } catch (InvalidRepositoryNameException $e) {
+                $errors[] = 'invalid_repo_name';
+            } catch (RepositoryNotFoundException $e) {
+                $errors[] = 'repo_not_exists';
+            }
         }
 
-        return view('lookup', compact('contributors'));
+        return view('lookup', compact('contributors'))
+            ->withErrors($errors);
     }
 }
