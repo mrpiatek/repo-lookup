@@ -38,6 +38,12 @@ class RepositoryLookupController extends Controller
             }
         }
 
+        //format numbers for display
+        $contributors = array_map(function ($row) {
+            $row['contributions'] = number_format($row['contributions']);
+            return $row;
+        }, $contributors);
+
         return view('lookup', compact('contributors'))
             ->withErrors($errors);
     }
