@@ -16,6 +16,7 @@
 
 namespace mrpiatek\RepoLookup\RepositoryLookup\DataFetchers;
 
+use Github\Exception\RuntimeException;
 use GrahamCampbell\GitHub\GitHubManager;
 use mrpiatek\RepoLookup\RepositoryLookup\{
     DataFetcherInterface, Exceptions\RepositoryNotFoundException
@@ -54,7 +55,7 @@ class GitHubDataFetcher implements DataFetcherInterface
      * Fetches information about GitHub repository contributors and returns it as an
      * array
      *
-     * @param string $vendor  Vendor name
+     * @param string $vendor Vendor name
      * @param string $package Package name
      *
      * @return array
@@ -63,6 +64,22 @@ class GitHubDataFetcher implements DataFetcherInterface
      */
     public function fetchRepositoryData(string $vendor, string $package): array
     {
-        //TODO: implement
+        try {
+            $result = $this->gitHubManager->api('repo')->contributors($vendor, $package);
+        } catch (RuntimeException $e) {
+            throw new RepositoryNotFoundException("", 0, $e);
+        }
+
+        $contributorsData = [];
+
+        foreach ($result as $contributor) {
+            $contributorsData[] = [
+                'name' => $contributor['login'],
+                'avatar_url' => $contributor['avatar_url'],
+                'contributions' => $contributor['contributions']
+            ];
+        }
+
+        return $contributorsData;
     }
 }
