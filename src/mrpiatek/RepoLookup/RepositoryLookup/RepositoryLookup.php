@@ -43,25 +43,11 @@ class RepositoryLookup
      */
     public function lookupRepository(string $repositoryName): array
     {
-        if ($repositoryName == 'mrpiatek') {
+        preg_match('/(?P<vendor>\w+)\/(?P<package>\w+)/', $repositoryName, $matches);
+        if (count($matches) === 0) {
             throw new InvalidRepositoryNameException();
-        } else if ($repositoryName == 'mrpiatek/null') {
-            throw new RepositoryNotFoundException();
-        } else {
-            return [
-                [
-                    'name' => 'taylorotwell',
-                    'avatar_url' =>
-                        'https://avatars3.githubusercontent.com/u/463230',
-                    'contributions' => 2953
-                ],
-                [
-                    'name' => 'GrahamCampbell',
-                    'avatar_url' =>
-                        'https://avatars0.githubusercontent.com/u/2829600',
-                    'contributions' => 40
-                ]
-            ];
         }
+
+        //TODO: fetch the actual data
     }
 }
