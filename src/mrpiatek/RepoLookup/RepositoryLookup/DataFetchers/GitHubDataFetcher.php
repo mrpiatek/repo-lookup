@@ -16,6 +16,7 @@
 
 namespace mrpiatek\RepoLookup\RepositoryLookup\DataFetchers;
 
+use GrahamCampbell\GitHub\GitHubManager;
 use mrpiatek\RepoLookup\RepositoryLookup\{
     DataFetcherInterface, Exceptions\RepositoryNotFoundException
 };
@@ -32,16 +33,35 @@ use mrpiatek\RepoLookup\RepositoryLookup\{
 class GitHubDataFetcher implements DataFetcherInterface
 {
     /**
+     * GitHub bridge
+     *
+     * @var GitHubManager
+     */
+    protected $gitHubManager;
+
+    /**
+     * GitHubDataFetcher constructor.
+     *
+     * @param GitHubManager $gitHubManager GitHub bridge
+     */
+    public function __construct(GitHubManager $gitHubManager)
+    {
+        $this->gitHubManager = $gitHubManager;
+    }
+
+
+    /**
      * Fetches information about GitHub repository contributors and returns it as an
      * array
      *
-     * @param string $githubRepositoryName Full name of the GitHub repository
+     * @param string $vendor Vendor name
+     * @param string $package Package name
      *
      * @return array
      *
      * @throws RepositoryNotFoundException
      */
-    public function fetchRepositoryData(string $githubRepositoryName): array
+    public function fetchRepositoryData(string $vendor, string $package): array
     {
         //TODO: implement
     }

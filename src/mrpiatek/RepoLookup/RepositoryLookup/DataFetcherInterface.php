@@ -30,11 +30,12 @@ interface DataFetcherInterface
     /**
      * Fetches information about repository contributors and returns it as an array
      *
-     * @param string $repositoryName Full name of the GitHub repository
+     * @param string $vendor Vendor name
+     * @param string $package Package name
      *
      * @return array
      *
      * @throws RepositoryNotFoundException
      */
-    public function fetchRepositoryData(string $repositoryName): array;
+    public function fetchRepositoryData(string $vendor, string $package): array;
 }
