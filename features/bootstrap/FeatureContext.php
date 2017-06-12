@@ -2,13 +2,12 @@
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
+use \Behat\MinkExtension\Context\MinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext implements Context
+class FeatureContext extends MinkContext implements Context
 {
     /**
      * Initializes context.
@@ -102,17 +101,9 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then I should see Taylor Otwell's avatar, :arg1 and :arg2 in one row
+     * @Then I should see :fullName's avatar, :login and :numberOfContributions contributions in one row
      */
-    public function iShouldSeeTaylorOtwellsAvatarAndInOneRow($arg1, $arg2)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then I should see Graham Campbell's avatar, :arg1 and :arg2 in one row
-     */
-    public function iShouldSeeGrahamCampbellsAvatarAndInOneRow($arg1, $arg2)
+    public function iShouldSeeContributorsAvatarNameAndNumberOfContributionsInOneRow($fullName, $login, $numberOfContributions)
     {
         throw new PendingException();
     }

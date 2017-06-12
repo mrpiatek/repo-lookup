@@ -25,5 +25,5 @@ Feature: Repository contributors lookup
 		Given I am on "/"
 		When I fill in "search" with "laravel/laravel"
 		And I press "submit"
-		Then I should see Taylor Otwell's avatar, "taylorotwell" and "2,953 contributions" in one row
-		And I should see Graham Campbell's avatar, "GrahamCampbell" and "40 contributions" in one row
+		Then I should see "Taylor Otwell"'s avatar, "taylorotwell" and "2,953" contributions in one row
+		And I should see "Graham Campbell"'s avatar, "GrahamCampbell" and "40" contributions in one row

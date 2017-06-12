@@ -9,11 +9,28 @@
         {{ csrf_field() }}
     </form>
 
-    @if(count($contributors) > 0 )
-        <ul>
-            @foreach($contributors as $user)
-                <li><img src="{{ $user['avatar_url'] }}" class="avatar"/> {{ $user['name'] }} <small>{{ $user['contributions'] }} contribution(s)</small></li>
+    @if($errors->any())
+        <ul class="alert alert-danger">
+            @foreach($errors->messages() as $error)
+                <li>@lang('errors.' . $error[0])</li>
             @endforeach
         </ul>
+    @endif
+
+    @if(count($contributors) > 0 )
+        <table id="contributors">
+            <tr>
+                <th>Avatar</th>
+                <th>Username</th>
+                <th>Contributions</th>
+            </tr>
+            @foreach($contributors as $user)
+                <tr class="contributor-row">
+                    <td><img src="{{ $user['avatar_url'] }}" class="avatar"/></td>
+                    <td>{{ $user['name'] }}</td>
+                    <td>{{ $user['contributions'] }}</td>
+                </tr>
+            @endforeach
+        </table>
     @endif
 @endsection
