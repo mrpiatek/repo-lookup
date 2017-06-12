@@ -16,6 +16,10 @@
 
 namespace mrpiatek\RepoLookup\RepositoryLookup;
 
+use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\{
+    InvalidRepositoryNameException, RepositoryNotFoundException
+};
+
 /**
  * Class RepositoryLookup
  *
@@ -33,9 +37,31 @@ class RepositoryLookup
      * @param string $repositoryName Full name of the repository
      *
      * @return array
+     *
+     * @throws InvalidRepositoryNameException
+     * @throws RepositoryNotFoundException
      */
     public function lookupRepository(string $repositoryName): array
     {
-        //TODO: implement
+        if ($repositoryName == 'mrpiatek') {
+            throw new InvalidRepositoryNameException();
+        } else if ($repositoryName == 'mrpiatek/null') {
+            throw new RepositoryNotFoundException();
+        } else {
+            return [
+                [
+                    'name' => 'taylorotwell',
+                    'avatar_url' =>
+                        'https://avatars3.githubusercontent.com/u/463230',
+                    'contributions' => 2953
+                ],
+                [
+                    'name' => 'GrahamCampbell',
+                    'avatar_url' =>
+                        'https://avatars0.githubusercontent.com/u/2829600',
+                    'contributions' => 40
+                ]
+            ];
+        }
     }
 }

@@ -2,6 +2,9 @@
 
 namespace spec\mrpiatek\RepoLookup\RepositoryLookup;
 
+use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\{
+    InvalidRepositoryNameException, RepositoryNotFoundException
+};
 use mrpiatek\RepoLookup\RepositoryLookup\RepositoryLookup;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -22,6 +25,7 @@ class RepositoryLookupSpec extends ObjectBehavior
                 'contributions' => 2953
             ]
         );
+
         $this->lookupRepository('laravel/laravel')->shouldContain(
             [
                 'name' => 'GrahamCampbell',
@@ -29,5 +33,17 @@ class RepositoryLookupSpec extends ObjectBehavior
                 'contributions' => 40
             ]
         );
+    }
+
+    function it_fails_with_invalid_repository_name()
+    {
+        $this->shouldThrow(InvalidRepositoryNameException::class)
+            ->duringLookupRepository('mrpiatek');
+    }
+
+    function it_fails_with_not_existing_repository()
+    {
+        $this->shouldThrow(RepositoryNotFoundException::class)
+            ->duringLookupRepository('mrpiatek/null');
     }
 }
