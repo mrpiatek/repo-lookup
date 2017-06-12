@@ -22,30 +22,6 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given I am on :arg1
-     */
-    public function iAmOn($arg1)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given I fill :arg1 with :arg2
-     */
-    public function iFillWith($arg1, $arg2)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given I press :arg1
-     */
-    public function iPress($arg1)
-    {
-        throw new PendingException();
-    }
-
-    /**
      * @Given I click on :arg1 header
      */
     public function iClickOnHeader($arg1)
@@ -121,14 +97,6 @@ class FeatureContext implements Context
      * @Given I lookup :arg1 repository
      */
     public function iLookupRepository($arg1)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then I should see :arg1
-     */
-    public function iShouldSee($arg1)
     {
         throw new PendingException();
     }
