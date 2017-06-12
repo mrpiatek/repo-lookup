@@ -10,6 +10,8 @@
     ],
     "require-dev": {
         "phpmd/phpmd": "2.*",
-        "squizlabs/PHP_CodeSniffer": "3.*"
-    }
+        "squizlabs/PHP_CodeSniffer": "3.*",
+        "phpspec/phpspec": "^3.0"
+    },
+    "autoload": {"psr-0": {"": "src"}}
 }
