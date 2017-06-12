@@ -5,3 +5,8 @@ default:
       sessions:
         default:
           goutte: ~
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+        - Behat\MinkExtension\Context\MinkContext
