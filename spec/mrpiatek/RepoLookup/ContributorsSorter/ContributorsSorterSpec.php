@@ -23,7 +23,7 @@ class ContributorsSorterSpec extends ObjectBehavior
             'contributions' => 3
         ],
         [
-            'name' => 'bbb',
+            'name' => 'Bbb',
             'contributions' => 2
         ]
     ];
@@ -112,6 +112,7 @@ class ContributorsSorterSpec extends ObjectBehavior
         }
 
         foreach ($data as $item) {
+            $item['name'] = strtolower($item['name']);
             if (isset($lastItem)) {
                 if ($sortOrder == 'ascending') {
                     \PHPUnit_Framework_Assert::assertGreaterThanOrEqual($item[$sortBy], $lastItem[$sortBy]);
