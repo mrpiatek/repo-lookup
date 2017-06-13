@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\View\View;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\InvalidRepositoryNameException;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\RepositoryNotFoundException;
 use mrpiatek\RepoLookup\RepositoryLookup\RepositoryLookup;
@@ -15,6 +16,7 @@ class RepositoryLookupController extends Controller
 
     /**
      * RepositoryLookupController constructor.
+     *
      * @param RepositoryLookup $repoLookup
      */
     public function __construct(RepositoryLookup $repoLookup)
@@ -23,6 +25,12 @@ class RepositoryLookupController extends Controller
     }
 
 
+    /**
+     * Controller action to lookup repositories
+     *
+     * @param Request $request
+     * @return View
+     */
     public function lookup(Request $request)
     {
         $contributors = [];
@@ -38,13 +46,24 @@ class RepositoryLookupController extends Controller
             }
         }
 
-        //format numbers for display
-        $contributors = array_map(function ($row) {
-            $row['contributions'] = number_format($row['contributions']);
-            return $row;
-        }, $contributors);
+        $contributors = $this->formatNumbers($contributors);
 
         return view('lookup', compact('contributors'))
             ->withErrors($errors);
+    }
+
+
+    /**
+     * Formats number of contributions to a readable format by adding thousand commas
+     *
+     * @param $contributors
+     * @return array
+     */
+    private function formatNumbers($contributors)
+    {
+        return array_map(function ($row) {
+            $row['contributions'] = number_format($row['contributions']);
+            return $row;
+        }, $contributors);
     }
 }
