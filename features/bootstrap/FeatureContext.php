@@ -51,7 +51,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then I should see repository contributors sorted by :sortBy in :sortOrder order
      */
-    public function iShouldSeeRepositoryContributorsSortedByInOrder($arg1, $arg2)
+    public function iShouldSeeRepositoryContributorsSortedByInOrder($sortBy, $sortOrder)
     {
         throw new PendingException();
     }
