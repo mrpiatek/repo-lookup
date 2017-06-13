@@ -22,8 +22,21 @@
         <table id="contributors">
             <tr>
                 <th>Avatar</th>
-                <th><a href="?search={{ $encodedRepoName }}" id="name-header">Username</a></th>
-                <th><a href="?search={{ $encodedRepoName }}" id="contributions-header">Contributions</a></th>
+                <th>
+                    <a href="?search={{ $encodedRepoName }}{{ isset($nameNextSort) ? '&sort_by=name&sort_order=' . $nameNextSort : '' }}"
+                       id="name-header">Username
+                        @if($sortBy == 'name')
+                            {{ $sortOrder == 'asc' ? '&uarr;' : '&darr;' }}
+                        @endif
+                    </a></th>
+                <th>
+                    <a href="?search={{ $encodedRepoName }}{{ isset($contributionsNextSort) ? '&sort_by=contributions&sort_order=' . $contributionsNextSort : '' }}"
+                       id="contributions-header">Contributions
+                        @if($sortBy == 'contributions')
+                            {{ $sortOrder == 'asc' ? '&uarr;' : '&darr;' }}
+                        @endif
+                    </a>
+                </th>
             </tr>
             @foreach($contributors as $user)
                 <tr class="contributor-row">

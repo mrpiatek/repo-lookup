@@ -54,6 +54,10 @@ class RepositoryLookupController extends Controller
         $errors = [];
         $dataSource = '';
         $search = '';
+        $sortOrder = null;
+        $sortBy = null;
+        $contributionsNextSort = 'asc';
+        $nameNextSort = 'asc';
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -74,18 +78,24 @@ class RepositoryLookupController extends Controller
             }
 
             //sort
-            if ($request->has(['sort_by', 'sort_order'])) {
+            if ($request->has('sort_by') && $request->has('sort_order')) {
 
-                if ($request->input('sort_order') == 'asc') {
-                    $sortOrder = ContributorsSorter::ORDER_ASCENDING;
-                } else {
-                    $sortOrder = ContributorsSorter::ORDER_DESCENDING;
-                }
+                $sortOrder = $request->input('sort_order');
+                $sortBy = $request->input('sort_by');
+
                 $contributors = $this->contributorsSorter->sort(
                     $contributors,
-                    $request->input('sort_by'),
-                    $sortOrder
+                    $sortBy,
+                    $sortOrder == 'asc' ? ContributorsSorter::ORDER_ASCENDING : ContributorsSorter::ORDER_DESCENDING
                 );
+
+                if ($sortBy == 'name') {
+                    $contributionsNextSort = 'asc';
+                    $nameNextSort = $this->getNextSortValue($sortOrder);
+                } elseif ($sortBy == 'contributions') {
+                    $nameNextSort = 'asc';
+                    $contributionsNextSort = $this->getNextSortValue($sortOrder);
+                }
             }
 
             if (count($errors) == 0) {
@@ -105,11 +115,24 @@ class RepositoryLookupController extends Controller
         return view('lookup', [
             'encodedRepoName' => $encodedRepoName,
             'contributors' => $contributors,
-            'dataSource' => $dataSource
+            'dataSource' => $dataSource,
+            'sortBy' => $sortBy,
+            'sortOrder' => $sortOrder,
+            'nameNextSort' => $nameNextSort,
+            'contributionsNextSort' => $contributionsNextSort,
         ])
             ->withErrors($errors);
     }
 
+    private function getNextSortValue(string $currentSort)
+    {
+        switch ($currentSort) {
+            case 'asc':
+                return 'desc';
+            case 'desc':
+                return null;
+        }
+    }
 
     /**
      * Formats number of contributions to a readable format by adding thousand commas
