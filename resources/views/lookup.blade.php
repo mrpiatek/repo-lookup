@@ -22,8 +22,8 @@
         <table id="contributors">
             <tr>
                 <th>Avatar</th>
-                <th><a href="#" id="name-header">Username</a></th>
-                <th><a href="#" id="contributions-header">Contributions</a></th>
+                <th><a href="?search={{ $encodedRepoName }}" id="name-header">Username</a></th>
+                <th><a href="?search={{ $encodedRepoName }}" id="contributions-header">Contributions</a></th>
             </tr>
             @foreach($contributors as $user)
                 <tr class="contributor-row">

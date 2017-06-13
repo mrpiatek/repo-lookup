@@ -37,6 +37,7 @@ class RepositoryLookupController extends Controller
         $contributors = [];
         $errors = [];
         $dataSource = '';
+        $search= '';
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -59,7 +60,10 @@ class RepositoryLookupController extends Controller
 
         $contributors = $this->formatNumbers($contributors);
 
+        $encodedRepoName = urlencode($search);
+
         return view('lookup', [
+            'encodedRepoName' => $encodedRepoName,
             'contributors' => $contributors,
             'dataSource' => $dataSource
         ])
