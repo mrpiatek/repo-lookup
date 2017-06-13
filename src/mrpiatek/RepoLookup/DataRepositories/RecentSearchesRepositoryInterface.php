@@ -29,7 +29,7 @@ interface RecentSearchesRepositoryInterface
     /**
      * Retrieves all recent searches
      *
-     * @return array Array with recent search terms
+     * @return RecentSearchItem[] Array with recent search terms
      */
     public function findAll(): array;
 

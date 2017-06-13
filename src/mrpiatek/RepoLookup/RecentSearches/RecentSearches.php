@@ -14,6 +14,8 @@
  */
 
 namespace mrpiatek\RepoLookup\RecentSearches;
+
+use mrpiatek\RepoLookup\DataRepositories\RecentSearchesRepositoryInterface;
 use mrpiatek\RepoLookup\DataRepositories\RecentSearchItem;
 
 /**
@@ -27,16 +29,34 @@ use mrpiatek\RepoLookup\DataRepositories\RecentSearchItem;
  */
 class RecentSearches
 {
+
+    /** @var  RecentSearchesRepositoryInterface */
+    protected $recentSearchesRepository;
+
+    /**
+     * RecentSearches constructor.
+     *
+     * @param RecentSearchesRepositoryInterface $recentSearchesRepository
+     */
+    public function __construct(RecentSearchesRepositoryInterface $recentSearchesRepository)
+    {
+        $this->recentSearchesRepository = $recentSearchesRepository;
+    }
+
+
     /**
      * Adds recent search entry
      *
      * @param string $search Full repository name
+     * @param \DateTimeInterface $searchDate
      *
      * @return void
      */
-    public function addRecentSearch(string $search)
+    public function addRecentSearch(string $search, \DateTimeInterface $searchDate)
     {
-        // TODO: write logic here
+        $this->recentSearchesRepository->insert(
+            new RecentSearchItem($search, $searchDate)
+        );
     }
 
     /**
@@ -46,6 +66,7 @@ class RecentSearches
      */
     public function getRecentSearches(): array
     {
-        // TODO: write logic here
+        $s = $this->recentSearchesRepository->findAll();
+        return $s;
     }
 }
