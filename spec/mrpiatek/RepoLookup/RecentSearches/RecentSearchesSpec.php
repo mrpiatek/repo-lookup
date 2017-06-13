@@ -57,7 +57,6 @@ class RecentSearchesSpec extends ObjectBehavior
         $recentSearchesRepository->findAll()->willReturn([]);
         $this->beConstructedWith($recentSearchesRepository);
 
-
-        $recentSearches = $this->getRecentSearches()->shouldHaveCount(0);
+        $this->getRecentSearches()->shouldHaveCount(0);
     }
 }
