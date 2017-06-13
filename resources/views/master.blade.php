@@ -69,6 +69,13 @@
     </style>
 </head>
 <body>
+<nav>
+    Menu:
+    <ul>
+        <li><a href="/">Repository contributors lookup</a></li>
+        <li><a href="/recent-searches">Recently conducted searches</a></li>
+    </ul>
+</nav>
 <div class="content">
     @yield('content')
 </div>
