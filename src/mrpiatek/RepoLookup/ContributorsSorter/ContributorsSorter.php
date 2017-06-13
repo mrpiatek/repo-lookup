@@ -33,13 +33,18 @@ class ContributorsSorter
     const NO_SORT = 0;
     const NAME_SORT = 1;
     const CONTRIBUTIONS_SORT = 2;
+    const ALLOWED_SORT_BY = [
+        self::NO_SORT,
+        self::NAME_SORT,
+        self::CONTRIBUTIONS_SORT
+    ];
 
     /**
      * Sorts contributors array by given fields with given order
      *
-     * @param array  $data      Input data
-     * @param int $sortBy    Field to sort by
-     * @param int    $sortOrder Sort order
+     * @param array $data      Input data
+     * @param int   $sortBy    Field to sort by
+     * @param int   $sortOrder Sort order
      *
      * @return array Sorted contributors
      *
@@ -48,7 +53,7 @@ class ContributorsSorter
      */
     public function sort(array $data, int $sortBy, int $sortOrder)
     {
-        if (!in_array($sortBy, [self::NO_SORT, self::NAME_SORT, self::CONTRIBUTIONS_SORT])) {
+        if (!in_array($sortBy, self::ALLOWED_SORT_BY)) {
             throw new InvalidSortByException();
         }
 
@@ -83,21 +88,21 @@ class ContributorsSorter
     /**
      * Converts sort by flag into array index
      *
-     * @param  int $sortBy
+     * @param int $sortBy Sort by field
      *
-     * @return string
+     * @return string Array index
      */
     private function parseSortBy(int $sortBy): string
     {
         $sortBy = strtolower($sortBy);
 
         switch ($sortBy) {
-            case self::NAME_SORT:
-                return 'name';
-            case self::CONTRIBUTIONS_SORT:
-                return 'contributions';
-            default:
-                return '';
+        case self::NAME_SORT:
+            return 'name';
+        case self::CONTRIBUTIONS_SORT:
+            return 'contributions';
+        default:
+            return '';
         }
     }
 }
