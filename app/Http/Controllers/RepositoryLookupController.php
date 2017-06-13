@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use mrpiatek\RepoLookup\ContributorsSorter\ContributorsSorter;
 use mrpiatek\RepoLookup\DataRepositories\RecentSearchesRepositoryInterface;
 use mrpiatek\RepoLookup\DataRepositories\RecentSearchItem;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\InvalidRepositoryNameException;
@@ -20,18 +21,26 @@ class RepositoryLookupController extends Controller
     /** @var  RecentSearchesRepositoryInterface */
     protected $recentSearchesRepository;
 
+    /** @var  ContributorsSorter */
+    protected $contributorsSorter;
+
     /**
      * RepositoryLookupController constructor.
      *
      * @param RepositoryLookup $repoLookup
      * @param RecentSearchesRepositoryInterface $recentSearchesRepository
+     * @param ContributorsSorter $contributorsSorter
      */
-    public function __construct(RepositoryLookup $repoLookup, RecentSearchesRepositoryInterface $recentSearchesRepository)
+    public function __construct(
+        RepositoryLookup $repoLookup,
+        RecentSearchesRepositoryInterface $recentSearchesRepository,
+        ContributorsSorter $contributorsSorter
+    )
     {
         $this->repoLookup = $repoLookup;
         $this->recentSearchesRepository = $recentSearchesRepository;
+        $this->contributorsSorter = $contributorsSorter;
     }
-
 
     /**
      * Controller action to lookup repositories
@@ -64,7 +73,22 @@ class RepositoryLookupController extends Controller
                 }
             }
 
-            if(count($errors) == 0) {
+            //sort
+            if ($request->has(['sort_by', 'sort_order'])) {
+
+                if ($request->input('sort_order') == 'asc') {
+                    $sortOrder = ContributorsSorter::ORDER_ASCENDING;
+                } else {
+                    $sortOrder = ContributorsSorter::ORDER_DESCENDING;
+                }
+                $contributors = $this->contributorsSorter->sort(
+                    $contributors,
+                    $request->input('sort_by'),
+                    $sortOrder
+                );
+            }
+
+            if (count($errors) == 0) {
                 $this->recentSearchesRepository->insert(
                     new RecentSearchItem(
                         $search,
