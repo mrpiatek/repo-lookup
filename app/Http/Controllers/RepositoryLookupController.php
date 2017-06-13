@@ -124,13 +124,18 @@ class RepositoryLookupController extends Controller
             ->withErrors($errors);
     }
 
+    /**
+     * Gets what sort order should be next when cycling trough sort orders
+     *
+     * @param string $currentSort
+     * @return null|string
+     */
     private function getNextSortValue(string $currentSort)
     {
-        switch ($currentSort) {
-            case 'asc':
-                return 'desc';
-            case 'desc':
-                return null;
+        if ($currentSort == 'asc') {
+            return 'desc';
+        } else {
+            return null;
         }
     }
 
