@@ -17,12 +17,14 @@ class RecentSearchesRepositoryEloquent implements RecentSearchesRepositoryInterf
     public function findAll(): array
     {
         $results = [];
-        \App\RecentSearchItem::all()->each(function (\App\RecentSearchItem $item) use (&$results) {
-            $results[] = new RecentSearchItem(
-                $item->search_term,
-                $item->search_date
-            );
-        });
+        \App\RecentSearchItem::orderBy('search_date', 'desc')
+            ->get()
+            ->each(function (\App\RecentSearchItem $item) use (&$results) {
+                $results[] = new RecentSearchItem(
+                    $item->search_term,
+                    $item->search_date
+                );
+            });
 
         return $results;
     }
