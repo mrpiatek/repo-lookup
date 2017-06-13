@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use mrpiatek\RepoLookup\DataRepositories\RecentSearchesRepositoryInterface;
+use mrpiatek\RepoLookup\DataRepositories\RecentSearchItem;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\InvalidRepositoryNameException;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\RepositoryNotFoundException;
 use mrpiatek\RepoLookup\RepositoryLookup\RepositoryLookup;
@@ -15,14 +17,19 @@ class RepositoryLookupController extends Controller
     /** @var  RepositoryLookup */
     protected $repoLookup;
 
+    /** @var  RecentSearchesRepositoryInterface */
+    protected $recentSearchesRepository;
+
     /**
      * RepositoryLookupController constructor.
      *
      * @param RepositoryLookup $repoLookup
+     * @param RecentSearchesRepositoryInterface $recentSearchesRepository
      */
-    public function __construct(RepositoryLookup $repoLookup)
+    public function __construct(RepositoryLookup $repoLookup, RecentSearchesRepositoryInterface $recentSearchesRepository)
     {
         $this->repoLookup = $repoLookup;
+        $this->recentSearchesRepository = $recentSearchesRepository;
     }
 
 
@@ -37,7 +44,7 @@ class RepositoryLookupController extends Controller
         $contributors = [];
         $errors = [];
         $dataSource = '';
-        $search= '';
+        $search = '';
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -59,6 +66,13 @@ class RepositoryLookupController extends Controller
         }
 
         $contributors = $this->formatNumbers($contributors);
+
+        $this->recentSearchesRepository->insert(
+            new RecentSearchItem(
+                $search,
+                new \DateTime('now', new \DateTimeZone(config('app.timezone')))
+            )
+        );
 
         $encodedRepoName = urlencode($search);
 

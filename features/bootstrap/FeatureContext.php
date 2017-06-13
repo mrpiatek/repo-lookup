@@ -9,6 +9,9 @@ use \Behat\MinkExtension\Context\MinkContext;
  */
 class FeatureContext extends MinkContext implements Context
 {
+
+    use \Laracasts\Behat\Context\Migrator;
+
     const TAYLOR_AVATAR_URL = 'https://avatars3.githubusercontent.com/u/463230';
     const GRAHAM_AVATAR_URL = 'https://avatars0.githubusercontent.com/u/2829600';
 
@@ -40,8 +43,8 @@ class FeatureContext extends MinkContext implements Context
 
         foreach ($contributors as $user) {
             if ($user['name'] == $login) {
-                PHPUnit_Framework_Assert::assertEquals($user['avatar_url'], $avatarUrl);
-                PHPUnit_Framework_Assert::assertEquals($user['contributions'], $numberOfContributions);
+                PHPUnit_Framework_Assert::assertEquals($avatarUrl, $user['avatar_url']);
+                PHPUnit_Framework_Assert::assertEquals($numberOfContributions, $user['contributions']);
                 return true;
             }
         }
