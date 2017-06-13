@@ -22,7 +22,7 @@ class FeatureContext extends MinkContext implements Context
     public function __construct()
     {
     }
-    
+
     /**
      * @Then I should see :fullName's avatar, :login and :numberOfContributions contributions in one row
      */
@@ -36,17 +36,40 @@ class FeatureContext extends MinkContext implements Context
             throw new PendingException();
         }
 
-        $rows = $this->getSession()->getPage()->findAll('css', 'table#contributors tr.contributor-row');
+        $contributors = $this->getContributorsOnPage();
 
-        foreach ($rows as $row) {
-            $cells = $row->findAll('css', 'td');
-            list($avatarCell, $nameCell, $contributionsCell) = $cells;
-            if ($nameCell->getText() == $login) {
-                PHPUnit_Framework_Assert::assertEquals($avatarCell->find('css', 'img')->getAttribute('src'), $avatarUrl);
-                PHPUnit_Framework_Assert::assertEquals($contributionsCell->getText(), $numberOfContributions);
+        foreach ($contributors as $user) {
+            if ($user['name'] == $login) {
+                PHPUnit_Framework_Assert::assertEquals($user['avatar_url'], $avatarUrl);
+                PHPUnit_Framework_Assert::assertEquals($user['contributions'], $numberOfContributions);
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * @Then I should see repository contributors sorted by :sortBy in :sortOrder order
+     */
+    public function iShouldSeeRepositoryContributorsSortedByInOrder($arg1, $arg2)
+    {
+        throw new PendingException();
+    }
+
+    private function getContributorsOnPage()
+    {
+        $rows = $this->getSession()->getPage()->findAll('css', 'table#contributors tr.contributor-row');
+        $contributors = [];
+
+        foreach ($rows as $row) {
+            $cells = $row->findAll('css', 'td');
+            list($avatarCell, $nameCell, $contributionsCell) = $cells;
+            $contributors[] = [
+                'name' => $nameCell->getText(),
+                'avatar_url' => $avatarCell->find('css', 'img')->getAttribute('src'),
+                'contributions' => $contributionsCell->getText()
+            ];
+        }
+        return $contributors;
     }
 }

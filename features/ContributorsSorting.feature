@@ -9,31 +9,31 @@ Feature: Repository contributors sorting
 		And I press "submit"
 	
 	Scenario: Sorting by ascending contributor name
-		Given I press "name"
-		Then I should see repository contributors sorted by name in ascending order
+		Given I follow "name-header"
+		Then I should see repository contributors sorted by "name" in "ascending" order
 
 	Scenario: Sorting by descending contributor name
-		Given I press "name"
-		Given I press "name"
-		Then I should see repository contributors sorted by name in descending order
+		Given I follow "name-header"
+		Given I follow "name-header"
+		Then I should see repository contributors sorted by "name" in "descending" order
 		
 	Scenario: Disabling name sorting
-		Given I press "name"
-		Given I press "name"
-		Given I press "name"
-		Then I should see repository contributors sorted by name in default order
+		Given I follow "name-header"
+		Given I follow "name-header"
+		Given I follow "name-header"
+		Then I should see repository contributors sorted by "name" in "default" order
 
 	Scenario: Sorting by ascending number of contributions
-		Given I press "number of contributions"
-		Then I should see repository contributors sorted by number of contributions in ascending order
+		Given I follow "contributions-header"
+		Then I should see repository contributors sorted by "number of contributions" in "ascending" order
 
 	Scenario: Sorting by descending number of contributions
-		Given I press "number of contributions"
-		Given I press "number of contributions"
-		Then I should see repository contributors sorted by number of contributions in descending order
+		Given I follow "contributions-header"
+		Given I follow "contributions-header"
+		Then I should see repository contributors sorted by "number of contributions" in "descending" order
 		
 	Scenario: Disabling "number of contributions" sorting
-		Given I press "number of contributions"
-		Given I press "number of contributions"
-		Given I press "number of contributions"
-		Then I should see repository contributors sorted by number of contributions in default order
+		Given I follow "contributions-header"
+		Given I follow "contributions-header"
+		Given I follow "contributions-header"
+		Then I should see repository contributors sorted by "number of contributions" in "default" order
