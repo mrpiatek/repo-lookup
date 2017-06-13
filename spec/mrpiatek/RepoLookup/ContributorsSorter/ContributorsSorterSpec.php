@@ -115,9 +115,9 @@ class ContributorsSorterSpec extends ObjectBehavior
             $item['name'] = strtolower($item['name']);
             if (isset($lastItem)) {
                 if ($sortOrder == 'ascending') {
-                    \PHPUnit_Framework_Assert::assertGreaterThanOrEqual($item[$sortBy], $lastItem[$sortBy]);
-                } else if ($sortOrder == 'descending') {
                     \PHPUnit_Framework_Assert::assertLessThanOrEqual($item[$sortBy], $lastItem[$sortBy]);
+                } else if ($sortOrder == 'descending') {
+                    \PHPUnit_Framework_Assert::assertGreaterThanOrEqual($item[$sortBy], $lastItem[$sortBy]);
                 }
             }
             $lastItem = $item;
