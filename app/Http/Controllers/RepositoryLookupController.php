@@ -76,7 +76,8 @@ class RepositoryLookupController extends Controller
                 $contributors = $this->sortContributors($contributors, $sortBy, $sortOrder);
             }
 
-            if (!$errors) {
+            if (!$errors && $request->method() == 'POST') {
+                // register recent searches only on first hit (POST request)
                 $this->recentSearchesRepository->insert(
                     new RecentSearchItem(
                         $searchTerm,
