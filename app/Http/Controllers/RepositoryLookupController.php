@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use mrpiatek\RepoLookup\ContributorsSorter\ContributorsSorter;
@@ -53,89 +52,127 @@ class RepositoryLookupController extends Controller
         $contributors = [];
         $errors = [];
         $dataSource = '';
-        $search = '';
-        $sortOrder = null;
-        $sortBy = null;
-        $contributionsNextSort = 'asc';
-        $nameNextSort = 'asc';
+        $searchTerm = '';
+        $sortBy = ContributorsSorter::NO_SORT;
+        $sortOrder = SORT_REGULAR;
 
         if ($request->has('search')) {
-            $search = $request->input('search');
+            $searchTerm = $request->input('search');
 
-            if (Cache::has($search)) {
-                $contributors = Cache::get($search);
+            if (Cache::has($searchTerm)) {
+                $contributors = Cache::get($searchTerm);
                 $dataSource = 'cache';
             } else {
-                try {
-                    $contributors = $this->repoLookup->lookupRepository($search);
+                $contributors = $this->getLiveContributorsData($searchTerm, $errors);
+                if (!$errors) {
+                    Cache::put($searchTerm, $contributors, 60 /* minutes */);
                     $dataSource = 'live';
-                    Cache::put($search, $contributors, 60 /* minutes */);
-                } catch (InvalidRepositoryNameException $e) {
-                    $errors[] = 'invalid_repo_name';
-                } catch (RepositoryNotFoundException $e) {
-                    $errors[] = 'repo_not_exists';
                 }
             }
 
-            //sort
             if ($request->has('sort_by') && $request->has('sort_order')) {
-
-                $sortOrder = $request->input('sort_order');
-                $sortBy = $request->input('sort_by');
-
-                $contributors = $this->contributorsSorter->sort(
-                    $contributors,
-                    $sortBy,
-                    $sortOrder == 'asc' ? ContributorsSorter::ORDER_ASCENDING : ContributorsSorter::ORDER_DESCENDING
-                );
-
-                if ($sortBy == 'name') {
-                    $contributionsNextSort = 'asc';
-                    $nameNextSort = $this->getNextSortValue($sortOrder);
-                } elseif ($sortBy == 'contributions') {
-                    $nameNextSort = 'asc';
-                    $contributionsNextSort = $this->getNextSortValue($sortOrder);
-                }
+                $sortBy = $this->parseSortBy($request->input('sort_by'));
+                $sortOrder = $this->parseSortOrder($request->input('sort_order'));
+                $contributors = $this->sortContributors($contributors, $sortBy, $sortOrder);
             }
 
-            if (count($errors) == 0) {
+            if (!$errors) {
                 $this->recentSearchesRepository->insert(
                     new RecentSearchItem(
-                        $search,
+                        $searchTerm,
                         new \DateTime('now', new \DateTimeZone(config('app.timezone')))
                     )
                 );
             }
         }
 
-        $contributors = $this->formatNumbers($contributors);
+        $contributors = $this->formatNumberOfContributions($contributors);
 
-        $encodedRepoName = urlencode($search);
-
-        return view('lookup', [
-            'encodedRepoName' => $encodedRepoName,
+        $view = view('lookup', [
+            'repoName' => $searchTerm,
             'contributors' => $contributors,
             'dataSource' => $dataSource,
             'sortBy' => $sortBy,
             'sortOrder' => $sortOrder,
-            'nameNextSort' => $nameNextSort,
-            'contributionsNextSort' => $contributionsNextSort,
-        ])
-            ->withErrors($errors);
+            'nameNextSort' => $this->getNextSortOrderFor(ContributorsSorter::NAME_SORT, $sortBy, $sortOrder),
+            'contributionsNextSort' => $this->getNextSortOrderFor(ContributorsSorter::CONTRIBUTIONS_SORT, $sortBy, $sortOrder),
+        ]);
+
+        if($errors){
+            $view = $view->withErrors($errors);
+        }
+
+        return $view;
+    }
+
+    protected function sortContributors(array $contributors, string $sortBy, string $sortOrder)
+    {
+        $contributors = $this->contributorsSorter->sort(
+            $contributors,
+            $sortBy,
+            $sortOrder
+        );
+
+        return $contributors;
     }
 
     /**
-     * Gets what sort order should be next when cycling trough sort orders
+     * Gets what sort order for given field should be next when cycling trough sort orders
      *
-     * @param string $currentSort
-     * @return null|string
+     * @param int $sortOrderFor
+     * @param int $currentSortBy
+     * @param int $currentSortOrder
+     * @return int|null|string
+     * @internal param string $currentSort
      */
-    private function getNextSortValue(string $currentSort)
+    private function getNextSortOrderFor(int $sortOrderFor, int $currentSortBy, int $currentSortOrder): int
     {
-        if ($currentSort == 'asc') {
-            return 'desc';
+        if ($sortOrderFor !== $currentSortBy || $currentSortOrder === SORT_REGULAR) {
+            return SORT_ASC;
+        } else if ($currentSortOrder === SORT_ASC) {
+            return SORT_DESC;
         } else {
-            return null;
+            return SORT_REGULAR;
+        }
+    }
+
+    /**
+     * Parses text representation of the field to sort by and converts it into flag
+     *
+     * @param string $sortBy
+     * @return int
+     */
+    private function parseSortBy(string $sortBy): int
+    {
+        $sortBy = strtolower($sortBy);
+
+        switch ($sortBy) {
+            case 'name':
+                return ContributorsSorter::NAME_SORT;
+            case 'contributions':
+                return ContributorsSorter::CONTRIBUTIONS_SORT;
+            default:
+                return ContributorsSorter::NO_SORT;
+        }
+    }
+
+    /**
+     * Parses text representation of the sort order and converts it into flag
+     *
+     * @param string $sortOrder
+     * @return int
+     */
+    private function parseSortOrder(string $sortOrder): int
+    {
+        $sortOrder = strtolower($sortOrder);
+
+        switch ($sortOrder) {
+            case 'asc':
+                return SORT_ASC;
+            case 'desc':
+                return SORT_DESC;
+            default:
+                return SORT_REGULAR;
         }
     }
 
@@ -145,11 +182,32 @@ class RepositoryLookupController extends Controller
      * @param $contributors
      * @return array
      */
-    private function formatNumbers($contributors)
+    private function formatNumberOfContributions($contributors)
     {
         return array_map(function ($row) {
             $row['contributions'] = number_format($row['contributions']);
             return $row;
         }, $contributors);
+    }
+
+    /**
+     * Fetches live data from the external resource
+     *
+     * @param string $searchTerm
+     * @param array $errors
+     * @return array
+     */
+    private function getLiveContributorsData(string $searchTerm, array &$errors): array
+    {
+        $contributors = [];
+        try {
+            $contributors = $this->repoLookup->lookupRepository($searchTerm);
+        } catch (InvalidRepositoryNameException $e) {
+            $errors[] = 'invalid_repo_name';
+        } catch (RepositoryNotFoundException $e) {
+            $errors[] = 'repo_not_exists';
+        } finally {
+            return $contributors;
+        }
     }
 }

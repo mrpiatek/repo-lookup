@@ -23,17 +23,17 @@
             <tr>
                 <th>Avatar</th>
                 <th>
-                    <a href="?search={{ $encodedRepoName }}{{ isset($nameNextSort) ? '&sort_by=name&sort_order=' . $nameNextSort : '' }}"
-                       id="name-header">Username
-                        @if($sortBy == 'name')
-                            {{ $sortOrder == 'asc' ? '&uarr;' : '&darr;' }}
+                    <a href="?search={{ urlencode($repoName) }}@if($nameNextSort !== SORT_REGULAR)&sort_by=name&sort_order={{ $nameNextSort === SORT_ASC ? 'asc' : 'desc' }}@endif
+                            " id="name-header">Username
+                        @if($sortBy === \mrpiatek\RepoLookup\ContributorsSorter\ContributorsSorter::NAME_SORT)
+                            {{ $sortOrder === SORT_ASC ? '&uarr;' : '&darr;' }}
                         @endif
                     </a></th>
                 <th>
-                    <a href="?search={{ $encodedRepoName }}{{ isset($contributionsNextSort) ? '&sort_by=contributions&sort_order=' . $contributionsNextSort : '' }}"
-                       id="contributions-header">Contributions
-                        @if($sortBy == 'contributions')
-                            {{ $sortOrder == 'asc' ? '&uarr;' : '&darr;' }}
+                    <a href="?search={{ urlencode($repoName) }}@if($contributionsNextSort !== SORT_REGULAR)&sort_by=contributions&sort_order={{ $contributionsNextSort === SORT_ASC ? 'asc' : 'desc' }}@endif
+                            " id="contributions-header">Contributions
+                        @if($sortBy === \mrpiatek\RepoLookup\ContributorsSorter\ContributorsSorter::CONTRIBUTIONS_SORT)
+                            {{ $sortOrder === SORT_ASC ? '&uarr;' : '&darr;' }}
                         @endif
                     </a>
                 </th>

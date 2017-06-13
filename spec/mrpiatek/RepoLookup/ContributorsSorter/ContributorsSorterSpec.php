@@ -38,8 +38,8 @@ class ContributorsSorterSpec extends ObjectBehavior
         /** @var Subject $sorted */
         $sorted = $this->sort(
             self::INITIAL_DATA,
-            'name',
-            ContributorsSorter::ORDER_ASCENDING
+            ContributorsSorter::NAME_SORT,
+            SORT_ASC
         );
 
         $sorted->shouldBeArray();
@@ -53,8 +53,8 @@ class ContributorsSorterSpec extends ObjectBehavior
         /** @var Subject $sorted */
         $sorted = $this->sort(
             self::INITIAL_DATA,
-            'name',
-            ContributorsSorter::ORDER_DESCENDING
+            ContributorsSorter::NAME_SORT,
+            SORT_DESC
         );
 
         $sorted->shouldBeArray();
@@ -68,8 +68,8 @@ class ContributorsSorterSpec extends ObjectBehavior
         /** @var Subject $sorted */
         $sorted = $this->sort(
             self::INITIAL_DATA,
-            'contributions',
-            ContributorsSorter::ORDER_ASCENDING
+            ContributorsSorter::CONTRIBUTIONS_SORT,
+            SORT_ASC
         );
 
         $sorted->shouldBeArray();
@@ -83,8 +83,8 @@ class ContributorsSorterSpec extends ObjectBehavior
         /** @var Subject $sorted */
         $sorted = $this->sort(
             self::INITIAL_DATA,
-            'contributions',
-            ContributorsSorter::ORDER_DESCENDING
+            ContributorsSorter::CONTRIBUTIONS_SORT,
+            SORT_DESC
         );
 
         $sorted->shouldBeArray();
@@ -96,13 +96,13 @@ class ContributorsSorterSpec extends ObjectBehavior
     function it_should_fail_with_invalid_sort_by()
     {
         $this->shouldThrow(InvalidSortByException::class)
-            ->duringSort([], 'invalid sort by field', ContributorsSorter::ORDER_DESCENDING);
+            ->duringSort([], 99, SORT_DESC);
     }
 
     function it_should_fail_with_invalid_sort_order()
     {
         $this->shouldThrow(InvalidSortOrderException::class)
-            ->duringSort([], 'name', 0);
+            ->duringSort([], ContributorsSorter::NO_SORT, 99);
     }
 
     function assert_correct_order(array $data, string $sortBy, string $sortOrder)
