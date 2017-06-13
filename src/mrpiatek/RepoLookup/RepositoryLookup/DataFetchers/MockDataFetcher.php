@@ -22,7 +22,7 @@ use mrpiatek\RepoLookup\RepositoryLookup\{
 };
 
 /**
- * Class GitHubDataFetcher
+ * Class MockDataFetcher
  *
  * @category Core
  * @package  MrpiatekRepositoryLookup
