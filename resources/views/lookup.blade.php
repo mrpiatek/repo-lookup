@@ -18,6 +18,7 @@
     @endif
 
     @if(count($contributors) > 0 )
+        <small>Data source: {{ $dataSource }}</small>
         <table id="contributors">
             <tr>
                 <th>Avatar</th>

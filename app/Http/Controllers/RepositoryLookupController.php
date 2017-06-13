@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\InvalidRepositoryNameException;
 use mrpiatek\RepoLookup\RepositoryLookup\Exceptions\RepositoryNotFoundException;
@@ -35,20 +36,33 @@ class RepositoryLookupController extends Controller
     {
         $contributors = [];
         $errors = [];
+        $dataSource = '';
 
         if ($request->has('search')) {
-            try {
-                $contributors = $this->repoLookup->lookupRepository($request->input('search'));
-            } catch (InvalidRepositoryNameException $e) {
-                $errors[] = 'invalid_repo_name';
-            } catch (RepositoryNotFoundException $e) {
-                $errors[] = 'repo_not_exists';
+            $search = $request->input('search');
+
+            if (Cache::has($search)) {
+                $contributors = Cache::get($search);
+                $dataSource = 'cache';
+            } else {
+                try {
+                    $contributors = $this->repoLookup->lookupRepository($search);
+                    $dataSource = 'live';
+                    Cache::put($search, $contributors, 60 /* minutes */);
+                } catch (InvalidRepositoryNameException $e) {
+                    $errors[] = 'invalid_repo_name';
+                } catch (RepositoryNotFoundException $e) {
+                    $errors[] = 'repo_not_exists';
+                }
             }
         }
 
         $contributors = $this->formatNumbers($contributors);
 
-        return view('lookup', compact('contributors'))
+        return view('lookup', [
+            'contributors' => $contributors,
+            'dataSource' => $dataSource
+        ])
             ->withErrors($errors);
     }
 
