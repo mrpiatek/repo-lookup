@@ -25,15 +25,15 @@ Feature: Repository contributors sorting
 
 	Scenario: Sorting by ascending number of contributions
 		Given I follow "contributions-header"
-		Then I should see repository contributors sorted by "number of contributions" in "ascending" order
+		Then I should see repository contributors sorted by "contributions" in "ascending" order
 
 	Scenario: Sorting by descending number of contributions
 		Given I follow "contributions-header"
 		Given I follow "contributions-header"
-		Then I should see repository contributors sorted by "number of contributions" in "descending" order
+		Then I should see repository contributors sorted by "contributions" in "descending" order
 		
 	Scenario: Disabling "number of contributions" sorting
 		Given I follow "contributions-header"
 		Given I follow "contributions-header"
 		Given I follow "contributions-header"
-		Then I should see repository contributors sorted by "number of contributions" in "default" order
+		Then I should see repository contributors sorted by "contributions" in "default" order

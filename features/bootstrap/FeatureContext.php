@@ -56,7 +56,18 @@ class FeatureContext extends MinkContext implements Context
      */
     public function iShouldSeeRepositoryContributorsSortedByInOrder($sortBy, $sortOrder)
     {
-        throw new PendingException();
+        $contributors = $this->getContributorsOnPage();
+
+        foreach ($contributors as $user) {
+            if (isset($lastUser)) {
+                if ($sortOrder == 'ascending') {
+                    PHPUnit_Framework_Assert::assertGreaterThanOrEqual($user[$sortBy], $lastUser[$sortBy]);
+                } else if ($sortOrder == 'descending') {
+                    PHPUnit_Framework_Assert::assertLessThanOrEqual($user[$sortBy], $lastUser[$sortBy]);
+                }
+            }
+            $lastUser = $user;
+        }
     }
 
     private function getContributorsOnPage()
