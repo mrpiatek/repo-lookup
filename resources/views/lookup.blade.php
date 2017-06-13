@@ -1,10 +1,11 @@
 @extends('master')
 
-@section('title', 'Repository Lookup')
+@section('title', $repoName ?: 'Repository Lookup')
 
 @section('content')
     <form method="POST" action="/">
-        <input name="search" type="text"/>
+        <label for="search">Full repository name:</label><br>
+        <input name="search" id="search" type="text" placeholder="laravel/laravel"/>
         <input name="submit" type="submit">
         {{ csrf_field() }}
     </form>
@@ -19,6 +20,7 @@
 
     @if(count($contributors) > 0 )
         <small>Data source: {{ $dataSource }}</small>
+        <hr>
         <table id="contributors">
             <tr>
                 <th>Avatar</th>

@@ -43,6 +43,19 @@
 
         .content {
             text-align: center;
+            display: inline-block;
+            width: 70%;
+            padding-top: 50px;
+        }
+
+        nav {
+            display: inline-block;
+            width: 30%;
+            vertical-align: top;
+        }
+
+        nav div {
+            padding:10px;
         }
 
         .title {
@@ -66,17 +79,22 @@
         .avatar {
             width: 100px;
         }
+
+        table {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 <nav>
-    Menu:
-    <ul>
-        <li><a href="/">Repository contributors lookup</a></li>
-        <li><a href="/recent-searches">Recently conducted searches</a></li>
-    </ul>
-</nav>
-<div class="content">
+    <div>
+        Menu:
+        <ul>
+            <li><a href="/">Repository contributors lookup</a></li>
+            <li><a href="/recent-searches">Recently conducted searches</a></li>
+        </ul>
+    </div>
+</nav><div class="content">
     @yield('content')
 </div>
 </body>
