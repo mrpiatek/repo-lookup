@@ -56,3 +56,21 @@ Run the following to validate code quality:
 * Unit tests only cover `src/` but do not cover the framework code of the application (but acceptance tests do),
 * `mrpiatek\RepoLookup\RepositoryLookup\DataFetchers\MockDataFetcher` mock class should be in tests domain,
 * Full repository name should be parsed using regular expression rather than `explode()`.
+
+# Fetching data from other sources than GitHub
+
+If you wish to fetch data from other sources you will need to write your own Data Fetcher. It must implement the
+`mrpiatek\RepoLookup\RepositoryLookup\DataFetcherInterface` and be bound to that interface abstract in the App Service Provider.
+The `fetchRepositoryData` function should accept 2 parameters: vendor name and package name. It should return an array
+of contributors. The data needs to fit format used by the `mrpiatek\RepoLookup\RepositoryLookup\RepositoryLookup` class
+meaning that each element of the array should contain at least those fields with given data types:
+* _string_ name - the contributor name,
+* _url_ avatar_url - a valid url to the user's avatar,
+* _integer_ contributions - number of contributions by user.
+
+If you wish to have many sources available at the same time and allow user to choose data source, then you will need to completely unbind
+concrete Data Fetcher from the abstract and inject proper concrete implementation to the `RepositoryLookup` while the request is
+being processed.
+
+New Data Fetchers should be in `mrpiatek\RepoLookup\RepositoryLookup\DataFetchers` namespace and be located
+in `src/mrpiatek/RepoLookup/RepositoryLookup/DataFetchers`.
