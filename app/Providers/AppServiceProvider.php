@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use Mockery\Mock;
 use mrpiatek\RepoLookup\RepositoryLookup\DataFetcherInterface;
 use mrpiatek\RepoLookup\RepositoryLookup\DataFetchers\GitHubDataFetcher;
 use mrpiatek\RepoLookup\RepositoryLookup\DataFetchers\MockDataFetcher;
