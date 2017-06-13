@@ -59,11 +59,18 @@ class FeatureContext extends MinkContext implements Context
         $contributors = $this->getContributorsOnPage();
 
         foreach ($contributors as $user) {
+            if ($sortBy == 'contributions') {
+                //parse number
+                $user['contributions'] = intval(str_replace(',', '', $user['contributions']));
+            } else if ($sortBy == 'name') {
+                $user['name'] = strtolower($user['name']);
+            }
+
             if (isset($lastUser)) {
                 if ($sortOrder == 'ascending') {
-                    PHPUnit_Framework_Assert::assertGreaterThanOrEqual($user[$sortBy], $lastUser[$sortBy]);
-                } else if ($sortOrder == 'descending') {
                     PHPUnit_Framework_Assert::assertLessThanOrEqual($user[$sortBy], $lastUser[$sortBy]);
+                } else if ($sortOrder == 'descending') {
+                    PHPUnit_Framework_Assert::assertGreaterThanOrEqual($user[$sortBy], $lastUser[$sortBy]);
                 }
             }
             $lastUser = $user;
