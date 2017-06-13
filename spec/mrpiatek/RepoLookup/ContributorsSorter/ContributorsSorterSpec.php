@@ -3,6 +3,9 @@
 namespace spec\mrpiatek\RepoLookup\ContributorsSorter;
 
 use mrpiatek\RepoLookup\ContributorsSorter\ContributorsSorter;
+use mrpiatek\RepoLookup\ContributorsSorter\Exceptions\{
+    InvalidSortByException, InvalidSortOrderException
+};
 use PhpSpec\Exception\Example\PendingException;
 use PhpSpec\ObjectBehavior;
 use PhpSpec\Wrapper\Subject;
@@ -88,6 +91,18 @@ class ContributorsSorterSpec extends ObjectBehavior
         $sorted->shouldHaveCount(count(self::INITIAL_DATA));
 
         $this->assert_correct_order($sorted->getWrappedObject(), 'contributions', 'descending');
+    }
+
+    function it_should_fail_with_invalid_sort_by()
+    {
+        $this->shouldThrow(InvalidSortByException::class)
+            ->duringSort([], 'invalid sort by field', ContributorsSorter::ORDER_DESCENDING);
+    }
+
+    function it_should_fail_with_invalid_sort_order()
+    {
+        $this->shouldThrow(InvalidSortOrderException::class)
+            ->duringSort([], 'name', 0);
     }
 
     function assert_correct_order(array $data, string $sortBy, string $sortOrder)
