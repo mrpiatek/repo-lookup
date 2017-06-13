@@ -58,6 +58,12 @@ class MockDataFetcher implements DataFetcherInterface
                     'avatar_url' =>
                         'https://avatars0.githubusercontent.com/u/2829600',
                     'contributions' => 40
+                ],
+                [
+                    'name' => 'themsaid',
+                    'avatar_url' =>
+                        'https://avatars0.githubusercontent.com/u/4332182',
+                    'contributions' => 16
                 ]
             ];
         } else if ($vendor == 'mrpiatek' && $package == 'repo-lookup') {
