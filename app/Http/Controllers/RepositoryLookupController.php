@@ -57,6 +57,8 @@ class RepositoryLookupController extends Controller
         $sortOrder = SORT_REGULAR;
 
         if ($request->has('search')) {
+            $this->validateRequest($request);
+            
             $searchTerm = $request->input('search');
 
             if (Cache::has($searchTerm)) {
@@ -99,7 +101,7 @@ class RepositoryLookupController extends Controller
             'contributionsNextSort' => $this->getNextSortOrderFor(ContributorsSorter::CONTRIBUTIONS_SORT, $sortBy, $sortOrder),
         ]);
 
-        if($errors){
+        if ($errors) {
             $view = $view->withErrors($errors);
         }
 
@@ -210,5 +212,19 @@ class RepositoryLookupController extends Controller
         } finally {
             return $contributors;
         }
+    }
+
+    /**
+     * Validates if the request is valid
+     *
+     * @param Request $request
+     */
+    private function validateRequest(Request $request)
+    {
+        $this->validate($request, [
+            'search' => ['required', 'max:255'],
+            'sort_by' => ['in:name,contributions'],
+            'sort_order' => ['in:asc,desc'],
+        ]);
     }
 }
