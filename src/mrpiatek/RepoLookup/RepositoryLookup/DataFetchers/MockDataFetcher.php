@@ -66,6 +66,15 @@ class MockDataFetcher implements DataFetcherInterface
                     'contributions' => 16
                 ]
             ];
+        } else if ($vendor == 'phalcon' && 'cphalcon') {
+            return [
+                [
+                    'name' => 'sjinks',
+                    'avatar_url' =>
+                        'https://avatars2.githubusercontent.com/u/7810770?v=3',
+                    'contributions' => 1645
+                ]
+            ];
         } else if ($vendor == 'mrpiatek' && $package == 'repo-lookup') {
             return [
                 [
