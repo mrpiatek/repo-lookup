@@ -21,8 +21,8 @@
         <table id="contributors">
             <tr>
                 <th>Avatar</th>
-                <th>Username</th>
-                <th>Contributions</th>
+                <th><a href="#" id="name-header">Username</a></th>
+                <th><a href="#" id="contributions-header">Contributions</a></th>
             </tr>
             @foreach($contributors as $user)
                 <tr class="contributor-row">
