@@ -51,4 +51,5 @@ Run the following to validate code quality:
 # Known issues
 
 * Unit tests only cover `src/` but do not cover the framework code of the application (but acceptance tests do),
-* `mrpiatek\RepoLookup\RepositoryLookup\DataFetchers\MockDataFetcher` mock class should be in tests domain.
+* `mrpiatek\RepoLookup\RepositoryLookup\DataFetchers\MockDataFetcher` mock class should be in tests domain,
+* Full repository name should be parsed using regular expression rather than `explode()`.
