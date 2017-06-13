@@ -30,16 +30,23 @@ use mrpiatek\RepoLookup\DataRepositories\RecentSearchItem;
 class RecentSearches
 {
 
-    /** @var  RecentSearchesRepositoryInterface */
+    /**
+     * Recent searches repository
+     *
+     * @var RecentSearchesRepositoryInterface
+     */
     protected $recentSearchesRepository;
 
     /**
      * RecentSearches constructor.
      *
-     * @param RecentSearchesRepositoryInterface $recentSearchesRepository
+     * @param RecentSearchesRepositoryInterface $recentSearchesRepository Recent
+     *                                                                    searches
+     *                                                                    repository
      */
-    public function __construct(RecentSearchesRepositoryInterface $recentSearchesRepository)
-    {
+    public function __construct(
+        RecentSearchesRepositoryInterface $recentSearchesRepository
+    ) {
         $this->recentSearchesRepository = $recentSearchesRepository;
     }
 
@@ -47,8 +54,8 @@ class RecentSearches
     /**
      * Adds recent search entry
      *
-     * @param string $search Full repository name
-     * @param \DateTimeInterface $searchDate
+     * @param string             $search     Full repository name
+     * @param \DateTimeInterface $searchDate Time the search was conducted
      *
      * @return void
      */

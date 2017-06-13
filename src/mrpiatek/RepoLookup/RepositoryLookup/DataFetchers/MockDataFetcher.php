@@ -69,8 +69,8 @@ class MockDataFetcher implements DataFetcherInterface
                     'contributions' => 6
                 ]
             ];
-        } else {
-            throw new RepositoryNotFoundException();
         }
+
+        throw new RepositoryNotFoundException();
     }
 }
