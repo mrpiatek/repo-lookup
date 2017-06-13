@@ -38,9 +38,9 @@ class ContributorsSorter
     /**
      * Sorts contributors array by given fields with given order
      *
-     * @param array $data Input data
-     * @param string $sortBy Field to sort by
-     * @param int $sortOrder Sort order
+     * @param array  $data      Input data
+     * @param string $sortBy    Field to sort by
+     * @param int    $sortOrder Sort order
      *
      * @return array Sorted contributors
      *
@@ -58,12 +58,17 @@ class ContributorsSorter
         }
 
         usort($data, function ($a, $b) use ($sortBy, $sortOrder) {
+            if ($sortBy == 'name') {
+                $a[$sortBy] = strtolower($a[$sortBy]);
+                $b[$sortBy] = strtolower($b[$sortBy]);
+            }
+
             if ($sortOrder == self::ORDER_ASCENDING) {
-                return $a[$sortBy] <= $b[$sortBy];
+                return $a[$sortBy] >= $b[$sortBy];
             }
 
             if ($sortOrder == self::ORDER_DESCENDING) {
-                return $a[$sortBy] >= $b[$sortBy];
+                return $a[$sortBy] <= $b[$sortBy];
             }
         });
 
