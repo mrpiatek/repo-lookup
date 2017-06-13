@@ -63,16 +63,18 @@ class RepositoryLookupController extends Controller
                     $errors[] = 'repo_not_exists';
                 }
             }
+
+            if(count($errors) == 0) {
+                $this->recentSearchesRepository->insert(
+                    new RecentSearchItem(
+                        $search,
+                        new \DateTime('now', new \DateTimeZone(config('app.timezone')))
+                    )
+                );
+            }
         }
 
         $contributors = $this->formatNumbers($contributors);
-
-        $this->recentSearchesRepository->insert(
-            new RecentSearchItem(
-                $search,
-                new \DateTime('now', new \DateTimeZone(config('app.timezone')))
-            )
-        );
 
         $encodedRepoName = urlencode($search);
 
