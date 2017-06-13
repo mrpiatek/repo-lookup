@@ -17,7 +17,7 @@ class RecentSearchesRepositoryEloquent implements RecentSearchesRepositoryInterf
     public function findAll(): array
     {
         $results = [];
-        \App\RecentSearchItem::findAll()->each(function (\App\RecentSearchItem $item) use (&$results) {
+        \App\RecentSearchItem::all()->each(function (\App\RecentSearchItem $item) use (&$results) {
             $results[] = new RecentSearchItem(
                 $item->search_term,
                 $item->search_date

@@ -12,3 +12,4 @@
 */
 
 Route::match(['get', 'post'], '/', 'RepositoryLookupController@lookup');
+Route::get('/recent-searches', 'RecentSearchesController@index');
