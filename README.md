@@ -27,6 +27,11 @@ is bootstrapped within Behat process. It loads `.env.behat` file as configuratio
 you will need to copy your app key from your `.env` file and paste it in the `.env.behat` file. The app key is stored
 under `APP_KEY` value (or you may copy it directly form console after calling `php artisan key:generate`).
 
+# Troubleshooting
+
+If you get _repository does not exist_ error after searching for a valid repository you are probably missing a GitHub token.
+
+If you get _QueryException_ error they you are probably missing database configuration, or it is invalid.
 
 # Testing
 
@@ -52,6 +57,11 @@ Run the following to validate code quality:
 ./vendor/bin/phpmd src text cleancode, codesize, controversial, design, naming, unusedcode
 ./vendor/bin/phpcs src
 ```
+
+ # Caching
+ 
+ This application uses cache to store repository contributors for 60 minuts after live hit. If you wish to clear
+ cache before that you may use `php artisan cache:clear` command.
 
 # Known issues
 
