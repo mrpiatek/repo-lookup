@@ -8,11 +8,13 @@ Run the following commands:
 git clone https://github.com/mrpiatek/repo-lookup.git ~/mrpiatek-repo-lookup
 cd ~/mrpiatek-repo-lookup
 composer install
+cp .env.example .env
+cp .env.behat.example .env.behat
 php artisan key:generate
 ```
 
 Now fill the `.env` file with your database credentials, [obtain GitHub personal access token](https://github.com/blog/1509-personal-api-tokens) and paste it in the `.env` file
-after `GITHUB_TOKEN=` .
+under `GITHUB_TOKEN` setting.
 
 You may provide your local timezone in `.env` file under `DEFAULT_TIMEZONE` setting.
 
@@ -23,7 +25,7 @@ You may now run `php artisan serve`.
 This project uses [laracasts/behat-laravel-extension](https://github.com/laracasts/Behat-Laravel-Extension) so that the application
 is bootstrapped within Behat process. It loads `.env.behat` file as configuration therefore
 you will need to copy your app key from your `.env` file and paste it in the `.env.behat` file. The app key is stored
-after `APP_KEY=` value.
+under `APP_KEY` value (or you may copy it directly form console after calling `php artisan key:generate`).
 
 
 # Testing
