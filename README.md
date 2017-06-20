@@ -16,6 +16,8 @@ php artisan key:generate
 Now fill the `.env` file with your database credentials, [obtain GitHub personal access token](https://github.com/blog/1509-personal-api-tokens) and paste it in the `.env` file
 under `GITHUB_TOKEN` setting.
 
+After providing your database credentials you will need to run `php artisan migrate` command to perform database migrations.
+
 You may provide your local timezone in `.env` file under `DEFAULT_TIMEZONE` setting.
 
 You may now run `php artisan serve`.
