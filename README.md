@@ -56,7 +56,7 @@ to assure good code quality within `src/` folder (framework related code aims to
 
 Run the following to validate code quality:
 ```
-./vendor/bin/phpmd src text cleancode, codesize, controversial, design, naming, unusedcode
+./vendor/bin/phpmd src text cleancode,codesize,controversial,design,naming,unusedcode
 ./vendor/bin/phpcs src
 ```
 
